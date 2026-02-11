@@ -327,6 +327,8 @@
             transform: translateY(30px);
             transition: opacity 0.8s ease, transform 0.8s ease;
             transition-delay: 0.6s;
+            will-change: contents;
+            transform: translateZ(0);
         }
 
         .typing-container.visible {
@@ -1109,7 +1111,7 @@
                     isIntroPlaying = false;
                     if (!typingStarted) {
                         typingStarted = true;
-                        setTimeout(type, 500);
+                        setTimeout(() => requestAnimationFrame(type), 500);
                     }
                 }, 300);
             }, 8300);
@@ -1146,7 +1148,7 @@
             bg.style.transform = `translateX(${mouseX}px) translateY(${mouseY}px) scale(${zoomLevel})`;
         }, 30);
 
-        // --- 4. RANDOMIZED TYPING ANIMATION ---
+        // --- 4. RANDOMIZED TYPING ANIMATION (OPTIMIZED) ---
         const designations = [
             "FRONTEND DEVELOPER", 
             "BACKEND DEVELOPER", 
@@ -1161,41 +1163,44 @@
         let text = '';
         let typingSpeed = 100;
         let typingStarted = false;
+        let lastUpdate = 0;
 
-        function type() {
-            // Pick current phrase
+        function type(timestamp = 0) {
+            if (!lastUpdate) lastUpdate = timestamp;
+            const elapsed = timestamp - lastUpdate;
+            
+            if (elapsed < typingSpeed) {
+                requestAnimationFrame(type);
+                return;
+            }
+            
+            lastUpdate = timestamp;
             const fullPhrase = designations[currentPhraseIndex];
 
             if (isDeleting) {
-                // Remove char
                 text = fullPhrase.substring(0, text.length - 1);
-                typingSpeed = 50; // Faster when deleting
+                typingSpeed = 50;
             } else {
-                // Add char
                 text = fullPhrase.substring(0, text.length + 1);
                 typingSpeed = 100; 
             }
 
-            typingElement.innerHTML = text; 
+            typingElement.textContent = text;
 
-            // Logic to switch states
             if (!isDeleting && text === fullPhrase) {
-                // Finished typing phrase, pause before delete
                 typingSpeed = 2000;
                 isDeleting = true;
             } else if (isDeleting && text === '') {
-                // Finished deleting, move to next random phrase
                 isDeleting = false;
                 typingSpeed = 500;
-                // Randomize next phrase index
                 let nextIndex;
                 do {
                     nextIndex = Math.floor(Math.random() * designations.length);
-                } while (nextIndex === currentPhraseIndex); // Ensure it's a new one
+                } while (nextIndex === currentPhraseIndex);
                 currentPhraseIndex = nextIndex;
             }
 
-            setTimeout(type, typingSpeed);
+            requestAnimationFrame(type);
         }
 
         // Start typing - now triggered by intro

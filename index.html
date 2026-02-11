@@ -114,6 +114,8 @@
             height: 100%;
             background: url('portfolio bg.png') center/cover no-repeat fixed;
             z-index: -1;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         .star-cluster {
@@ -178,6 +180,7 @@
             font-size: 1.5rem;
             color: var(--primary);
             transition: all 1s ease;
+            opacity: 0;
         }
 
         .logo-icon.intro-animate {
@@ -248,6 +251,8 @@
             opacity: 0;
             transform: scale(0);
             transition: opacity 0.8s ease, transform 0.8s ease, width 0.8s ease, height 0.8s ease, margin-bottom 0.8s ease;
+            will-change: transform, opacity, width, height;
+            transform: translateZ(0);
         }
 
         .pfp-container.visible {
@@ -282,6 +287,8 @@
             transition: opacity 0.8s ease, transform 0.8s ease, font-size 0.8s ease, min-height 0.8s ease;
             visibility: hidden;
             min-height: 80px;
+            will-change: transform, opacity;
+            transform: translateZ(0);
         }
 
         h1.main-title.visible {
@@ -300,6 +307,8 @@
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.5s ease, transform 0.5s ease;
+            will-change: transform, opacity;
+            transform: translateZ(0);
         }
 
         h2.name-title.visible {
@@ -356,6 +365,8 @@
         .marquee-content {
             display: inline-block;
             animation: scroll 20s linear infinite;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         .skill-item {
@@ -485,6 +496,8 @@
             display: inline-flex;
             gap: 30px;
             animation: scroll 30s linear infinite;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         .project-card {
@@ -649,6 +662,10 @@
         @media (max-width: 768px) {
             * { cursor: auto !important; }
             .cursor, .cursor-dot { display: none; }
+            
+            /* Optimize touch scrolling */
+            body { -webkit-overflow-scrolling: touch; }
+            
             h1.main-title { font-size: 2.5rem; }
             h2.name-title { font-size: 1.2rem; }
             .typing-container { min-height: 3em; font-size: 0.8rem; }
@@ -1013,7 +1030,8 @@
                 mainTitle.style.background = 'none';
                 mainTitle.style.webkitTextFillColor = '#d7a4fc';
                 mainTitle.style.color = '#d7a4fc';
-                mainTitle.style.textShadow = '0 0 15px rgba(215, 164, 252, 0.6), 0 0 30px rgba(215, 164, 252, 0.4)';
+                mainTitle.style.filter = 'drop-shadow(0 0 15px rgba(215, 164, 252, 0.6)) drop-shadow(0 0 30px rgba(215, 164, 252, 0.4))';
+                mainTitle.style.textShadow = 'none';
                 mainTitle.style.animation = 'none';
                 pfpContainer.style.width = '120px';
                 pfpContainer.style.height = '120px';
@@ -1027,7 +1045,8 @@
                 mainTitle.textContent = "I'm";
                 mainTitle.style.fontSize = 'clamp(1.5rem, 3vw, 2.5rem)';
                 mainTitle.style.opacity = '1';
-                mainTitle.style.textShadow = '0 0 15px rgba(215, 164, 252, 0.6), 0 0 30px rgba(215, 164, 252, 0.4)';
+                mainTitle.style.filter = 'drop-shadow(0 0 15px rgba(215, 164, 252, 0.6)) drop-shadow(0 0 30px rgba(215, 164, 252, 0.4))';
+                mainTitle.style.textShadow = 'none';
                 pfpContainer.style.width = '130px';
                 pfpContainer.style.height = '130px';
             }, 2100);
@@ -1040,7 +1059,8 @@
                 mainTitle.textContent = 'SWAGNIK GANGULY';
                 mainTitle.style.fontSize = 'clamp(1.5rem, 3vw, 2.5rem)';
                 mainTitle.style.opacity = '1';
-                mainTitle.style.textShadow = '0 0 15px rgba(215, 164, 252, 0.6), 0 0 30px rgba(215, 164, 252, 0.4)';
+                mainTitle.style.filter = 'drop-shadow(0 0 15px rgba(215, 164, 252, 0.6)) drop-shadow(0 0 30px rgba(215, 164, 252, 0.4))';
+                mainTitle.style.textShadow = 'none';
                 pfpContainer.style.width = '160px';
                 pfpContainer.style.height = '160px';
             }, 3700);
@@ -1056,6 +1076,7 @@
                 mainTitle.style.webkitBackgroundClip = 'text';
                 mainTitle.style.backgroundClip = 'text';
                 mainTitle.style.webkitTextFillColor = 'transparent';
+                mainTitle.style.filter = 'none';
                 mainTitle.style.textShadow = 'none';
                 mainTitle.style.animation = 'none';
                 mainTitle.style.opacity = '1';
